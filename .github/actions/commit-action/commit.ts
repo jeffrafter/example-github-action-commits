@@ -21,10 +21,12 @@ const run = async (): Promise<void> => {
     const octokit: github.GitHub = new github.GitHub(process.env['GITHUB_TOKEN'] || '')
     const nwo = process.env['GITHUB_REPOSITORY'] || '/'
     const [owner, repo] = nwo.split('/')
+    console.log({owner, repo})
 
     // Grab the emoji
     const githubEmojiResponse = await octokit.emojis.get()
     const githubEmojis: {[name: string]: string} = githubEmojiResponse.data
+    console.log({githubEmojis})
 
     // Grab the ref for a branch (master in this case)
     // If you already know the sha then you don't need to do this
@@ -36,6 +38,7 @@ const run = async (): Promise<void> => {
       ref,
     })
     const sha = refResponse.data.object.sha
+    console.log({sha})
 
     // Grab the current tree so we can see the list of paths
     // https://developer.github.com/v3/git/trees/#get-a-tree-recursively
@@ -47,6 +50,7 @@ const run = async (): Promise<void> => {
     const paths: Array<string> = baseTreeResponse.data.tree.map((item: TreeEntry) => {
       return item.path
     })
+    console.log({paths})
 
     // Keep track of the entries for this commit
     const tree: Array<GitCreateTreeParamsTree> = []
@@ -71,6 +75,8 @@ const run = async (): Promise<void> => {
       const emojiFileResponse = await fetch(githubEmojis[name])
       const emojiFileBuffer = await emojiFileResponse.buffer()
       const content = emojiFileBuffer.toString('base64')
+      console.log(`CONTENT FOR: ${name}`)
+      console.log({content})
 
       // If you have a large amount of data to commit it is sometimes
       // better to create a sha for each file individually. You can then
@@ -113,6 +119,7 @@ const run = async (): Promise<void> => {
       base_tree: sha,
       tree: tree,
     })
+    console.log({treeResponse: treeResponse.data})
 
     // Commit
     const message = `Update emoji. Fixes #${issue.number}`
