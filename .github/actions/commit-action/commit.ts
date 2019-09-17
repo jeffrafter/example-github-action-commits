@@ -63,14 +63,14 @@ const run = async (): Promise<void> => {
     for (let i = 0; i < emojiNames.length; i++) {
       const name = emojiNames[i]
       // Is this a valid emoji name?
-      if (githubEmojis[name] || name === '+1' || name === '-1') {
+      if (!githubEmojis[name] || name === '+1' || name === '-1') {
         console.log(`Invalid emoji name: ${name}`)
-        return
+        continue
       }
       // Does it already exist, if so, no changes
       const fileName = `${name}.png`
       if (paths.indexOf(fileName) >= 0) {
-        return
+        continue
       }
       // Download and convert to base64
       const emojiFileResponse = await fetch(githubEmojis[name])
