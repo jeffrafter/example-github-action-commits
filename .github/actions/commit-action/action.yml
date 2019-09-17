@@ -1,0 +1,6 @@
+name: "commit-action"
+description: "Commits some files"
+author: "jeffrafter"
+runs:
+  using: "node12"
+  main: "./commit.js"
