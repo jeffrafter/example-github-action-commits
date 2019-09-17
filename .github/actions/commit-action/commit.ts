@@ -81,23 +81,25 @@ const run = async (): Promise<void> => {
 
       // If you have a large amount of data to commit it is sometimes
       // better to create a sha for each file individually. You can then
-      // use the created blob shas to construct the tree
-      // const blobResponse = await octokit.git.createBlob({
-      //   owner,
-      //   repo,
-      //   encoding: 'base64',
-      //   content,
-      // })
-      // const blobSha = blobResponse.data.sha
+      // use the created blob shas to construct the tree. You _must_ do
+      // this when the content is non-text
+      // https://github.com/octokit/rest.js/issues/1313#issuecomment-531911534
+      const blobResponse = await octokit.git.createBlob({
+        owner,
+        repo,
+        encoding: 'base64',
+        content,
+      })
+      const blobSha = blobResponse.data.sha
 
-      // In our case the content is small, so we'll use the content directly
-      // for each tree entry
+      // Add the sha of each blob as a tree entry. We can't use the contents directly
+      // for each tree entry because the files are binary
       tree.push({
         path: fileName,
         mode: '100644',
         type: 'blob',
-        content: content,
-        // sha: blobSha
+        sha: blobSha,
+        //content: content, // if your content is small and not-binary you could push directly
       })
     }
 
