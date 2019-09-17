@@ -114,6 +114,7 @@ const run = async (): Promise<void> => {
     // }
 
     // Create the tree using the collected tree entries
+    // https://developer.github.com/v3/git/trees/#create-a-tree
     const treeResponse = await octokit.git.createTree({
       owner,
       repo,
@@ -122,7 +123,8 @@ const run = async (): Promise<void> => {
     })
     console.log({treeResponse: treeResponse.data})
 
-    // Commit
+    // Commit that tree
+    // https://developer.github.com/v3/git/commits/#create-a-commit
     const message = `Update emoji. Fixes #${issue.number}`
     const commitResponse = await octokit.git.createCommit({
       owner,
@@ -133,6 +135,19 @@ const run = async (): Promise<void> => {
     })
 
     console.log(`Commit complete: ${commitResponse.data.sha}`)
+
+    // The commit is complete but it is unreachable
+    // We have to update master to point to it
+    // https://developer.github.com/v3/git/refs/#update-a-reference
+    const updateRefResponse = await octokit.git.updateRef({
+      owner,
+      repo,
+      ref: 'refs/heads/master',
+      sha: commitResponse.data.sha,
+      force: false,
+    })
+    console.log({updateRefResponse: updateRefResponse.data})
+    console.log('Done')
   } catch (error) {
     core.setFailed(`Debug-action failure: ${error}`)
   }
