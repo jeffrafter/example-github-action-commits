@@ -142,7 +142,7 @@ const run = async (): Promise<void> => {
     const updateRefResponse = await octokit.git.updateRef({
       owner,
       repo,
-      ref: 'refs/heads/master',
+      ref: 'heads/master',
       sha: commitResponse.data.sha,
       force: false,
     })
