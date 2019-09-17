@@ -1,0 +1,20 @@
+name: "Debug workflow"
+on: [push]
+
+jobs:
+  build:
+    name: Debug
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - run: npm install
+      - run: npm run build
+      - uses: ./.github/actions/debug-action
+        with:
+          amazing-creature: Octocat
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: debug
+      - run: echo There was an amazing message - ${{ steps.debug.outputs.amazing-message }}
