@@ -9,6 +9,7 @@ interface TreeEntry {
 
 const run = async (): Promise<void> => {
   try {
+    // Limit only to when issues are opened (not edited, closed, etc)
     // if (github.context.payload.action !== 'opened') return
 
     const issue = github.context.payload.issue
@@ -31,7 +32,7 @@ const run = async (): Promise<void> => {
     // Grab the ref for a branch (master in this case)
     // If you already know the sha then you don't need to do this
     // https://developer.github.com/v3/git/refs/#get-a-reference
-    const ref = 'refs/heads/master'
+    const ref = 'heads/master'
     const refResponse = await octokit.git.getRef({
       owner,
       repo,
