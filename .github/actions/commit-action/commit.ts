@@ -9,7 +9,7 @@ interface TreeEntry {
 
 const run = async (): Promise<void> => {
   try {
-    if (github.context.payload.action !== 'opened') return
+    // if (github.context.payload.action !== 'opened') return
 
     const issue = github.context.payload.issue
     if (!issue) return
