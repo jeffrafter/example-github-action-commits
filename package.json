@@ -12,6 +12,7 @@
     "@types/jest": "^24.0.18",
     "@types/js-yaml": "^3.12.1",
     "@types/node": "^12.7.5",
+    "@types/node-fetch": "^2.5.0",
     "@typescript-eslint/eslint-plugin": "^2.2.0",
     "@typescript-eslint/parser": "^2.2.0",
     "eslint": "^6.3.0",
@@ -22,5 +23,8 @@
     "prettier": "^1.18.2",
     "ts-jest": "^24.0.2",
     "typescript": "^3.6.3"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0"
   }
 }
